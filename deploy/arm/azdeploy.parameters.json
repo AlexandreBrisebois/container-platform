@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus"
+        },
+        "prefix": {
+            "value": "cp"
+        },
+        "mode": {
+            "value": "Incremental"
+        },
+        "repo-url": {
+            "value": "https://github.com/AlexandreBrisebois/container-platform/tree/trunk/deploy/arm"
+        }
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "prefix": {
+            "type": "string"
+        }, 
+        "mode": {
+            "type": "string",
+            "defaultValue" : "Incremental"
+        },
+        "repo-url": {
+            "type": "string",
+             "defaultValue" : "https://github.com/AlexandreBrisebois/megaphone/tree/trunk/deploy/arm"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "rg-name": "[concat(parameters('prefix'), '-rg')]",
+        "keyvault-deployment-name" :"[concat(parameters('prefix'),'-keyvault-deployment')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('location')]",
+            "name": "[variables('rg-name')]",
+            "properties": {}
+        },
+        {
+            "name": "[variables('keyvault-deployment-name')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "resourceGroup" : "[variables('rg-name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('rg-name'))]"
+            ],
+            "properties": {
+                "mode": "[parameters('mode')]",
+                "templateLink": {
+                    "uri": "[concat(parameters('repo-url'), '/templates/key-vault.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location" :  {"value": "[parameters('location')]"},
+                    "prefix" :  {"value": "[parameters('prefix')]"}
+                }
+            }
+        }
+    ],
+    "outputs": {
+
+    }
+}
